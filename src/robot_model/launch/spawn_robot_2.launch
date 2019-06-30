@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch>
+    <arg name="x" default="2"/>
+    <arg name="y" default="2"/>
+    <arg name="z" default="0.2"/>
+    <arg name="id" default="1"/>
+
+        <param name="robot_description" command="cat '$(find robot_model)/urdf/differential_2.xacro'" />
+
+        <!-- send fake joint values -->
+        <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
+            <param name="use_gui" value="False"/>
+        </node>
+
+        <!-- Combine joint values -->
+        <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher"/>
+        
+        <node name="mybot_spawn_1" pkg="gazebo_ros" type="spawn_model" output="screen"
+            args="-urdf -param robot_description -model robot_2 -x $(arg x) -y $(arg y) -z $(arg z)"> 
+        </node>        
+
+
+</launch>

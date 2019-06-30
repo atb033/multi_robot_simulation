@@ -1,0 +1,14 @@
+<!-- Spawn 1 robot in the environment -->
+<launch>
+    <!-- Spawn the world -->
+    <include file="$(find gazebo_ros)/launch/empty_world.launch">
+        <!-- <arg name="world_name" value="$(find robot_model)/worlds/multi_testing.world"/> -->
+        <arg name="gui" value="true"/>
+        <arg name="headless" value="false"/>
+        <arg name="paused" value="true"/>
+        <arg name="verbose" value="false"/>
+        <arg name="debug" value="false"/>
+    </include>
+
+
+</launch>

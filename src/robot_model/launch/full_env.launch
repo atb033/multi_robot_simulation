@@ -1,0 +1,12 @@
+<!-- Spawn the whole environment -->
+<launch>
+    <!-- Spawn the world -->
+    <include file="$(find robot_model)/launch/spawn_world.launch">
+    </include>
+
+    <include ns="robot_1" file="$(find robot_model)/launch/spawn_robot_1.launch"> 
+    </include>
+
+    <include ns="robot_2" file="$(find robot_model)/launch/spawn_robot_2.launch"> 
+    </include>
+</launch>

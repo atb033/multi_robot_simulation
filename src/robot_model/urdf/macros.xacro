@@ -1,0 +1,245 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+<!-- <xacro:property name="pi" value="3.14159265359" /> -->
+
+
+<xacro:macro name="wheel" params="name parent_link position diameter id">
+
+<joint name="${name}_wheel" type="continuous">
+  <parent link="${parent_link}"/>
+  <child link="${name}_wheel_${id}"/>
+  <origin xyz="${position}" rpy="-${pi/2} 0.0 0.0"/>
+  <axis xyz = "0 0 1"/>
+  <dynamics damping="0.7"/>
+</joint>
+
+<transmission name="trans_${name}_wheel_${id}">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="${name}_wheel">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="${name}_wheel_${id}_motor">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+<link name="${name}_wheel_${id}">
+  <collision>
+    <origin xyz="0.0 0.0 0.0" rpy="0 0 0"/>
+    <geometry>
+      <cylinder length="0.025" radius="${diameter/2}"/>
+    </geometry>
+  </collision>
+
+  <visual>
+    <origin xyz="0.0 0.0 0.0" rpy="0 0 0"/>
+    <geometry>
+      <cylinder length="0.025" radius="${diameter/2}"/>
+    </geometry>
+  </visual>
+
+  <inertial>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <mass value="1."/>
+    <inertia
+  ixx="${ (1.*(3*(diameter/2)*(diameter/2)*(diameter/2) + 0.025*0.025))/12 }" ixy="0.0" ixz="0.0"
+  iyy="${ (1.*(3*(diameter/2)*(diameter/2)*(diameter/2) + 0.025*0.025))/12 }" iyz="0.0"
+  izz="${0.5*1.*diameter/2}"/>
+  </inertial>
+</link>
+
+<gazebo reference="${name}_wheel_${id}">
+    <mu1>1.0</mu1>
+    <mu2>1.0</mu2>
+    <material>Gazebo/Black</material>
+</gazebo>
+
+</xacro:macro>
+
+<xacro:macro name="caster" params="name parent_link position diameter">
+
+<joint name="${name}_caster" type="continuous">
+  <parent link="${parent_link}"/>
+  <child link="${name}_caster"/>
+  <origin xyz="${position}" rpy="0.0 0.0 0.0"/>
+  <axis xyz = "0 0 1"/>
+  <dynamics damping="0.1"/>
+</joint>
+
+<link name="${name}_caster">
+  <collision>
+    <origin xyz="0.0 0.0 0.0" rpy="0 0 0"/>
+    <geometry>
+      <sphere radius="${diameter/2}"/>
+    </geometry>
+  </collision>
+
+  <visual>
+    <origin xyz="0.0 0.0 0.0" rpy="0 0 0"/>
+    <geometry>
+      <sphere radius="${diameter/2}"/>
+    </geometry>
+  </visual>
+
+  <inertial>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <mass value="0.03"/>
+    <inertia
+  ixx="0.001" ixy="0.0" ixz="0.0"
+  iyy="0.001" iyz="0.0"
+  izz="0.001"/>
+  </inertial>
+</link>
+
+<gazebo reference="${name}_caster">
+    <mu1>0.0</mu1>
+    <mu2>0.0</mu2>
+    <material>Gazebo/Black</material>
+</gazebo>
+
+</xacro:macro>
+
+<xacro:macro name="number" params="digit parent_link base_width base_height">
+
+<joint name="number_${digit}" type="fixed">
+  <parent link="${parent_link}"/>
+  <child link="number_${digit}"/>
+  <origin xyz="0.0 0.0 0.0" rpy="0 0 0"/>
+</joint>
+
+<link name="number_${digit}">
+
+  <visual>
+    <origin xyz="0 ${base_width/2} ${base_height/2}" rpy="0 0 ${pi/2}"/>
+    <geometry>
+      <mesh filename="$(find swarm_description)/dae/number${digit}.dae" scale="0.15 0.15 0.15"/>
+    </geometry>
+  </visual>
+
+  <visual>
+    <origin xyz="0 ${-base_width/2} ${base_height/2}" rpy="0 0 ${-pi/2}"/>
+    <geometry>
+      <mesh filename="$(find swarm_description)/dae/number${digit}.dae" scale="0.15 0.15 0.15"/>
+    </geometry>
+  </visual>
+
+</link>
+
+</xacro:macro>
+
+<xacro:macro name="number2" params="digit1 digit2 parent_link base_width base_height">
+
+<joint name="number_${digit1}${digit2}" type="fixed">
+  <parent link="${parent_link}"/>
+  <child link="number_${digit1}${digit2}"/>
+  <origin xyz="0.0 0.0 0.0" rpy="0 0 0"/>
+</joint>
+
+<link name="number_${digit1}${digit2}">
+
+  <visual>
+    <origin xyz="0.03 ${base_width/2} ${base_height/2}" rpy="0 0 ${pi/2}"/>
+    <geometry>
+      <mesh filename="$(find swarm_description)/dae/number${digit1}.dae" scale="0.15 0.15 0.15"/>
+    </geometry>
+  </visual>
+
+  <visual>
+    <origin xyz="-0.03 ${base_width/2} ${base_height/2}" rpy="0 0 ${pi/2}"/>
+    <geometry>
+      <mesh filename="$(find swarm_description)/dae/number${digit2}.dae" scale="0.15 0.15 0.15"/>
+    </geometry>
+  </visual>
+
+  <visual>
+    <origin xyz="-0.03 ${-base_width/2} ${base_height/2}" rpy="0 0 ${-pi/2}"/>
+    <geometry>
+      <mesh filename="$(find swarm_description)/dae/number${digit1}.dae" scale="0.15 0.15 0.15"/>
+    </geometry>
+  </visual>
+
+  <visual>
+    <origin xyz="0.03 ${-base_width/2} ${base_height/2}" rpy="0 0 ${-pi/2}"/>
+    <geometry>
+      <mesh filename="$(find swarm_description)/dae/number${digit2}.dae" scale="0.15 0.15 0.15"/>
+    </geometry>
+  </visual>
+
+</link>
+
+</xacro:macro>
+
+  <xacro:macro name="lidar" params="name parent_link position rpy" >
+    <link name="${name}">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <mass value="1" />
+      <!-- RANDOM INERTIA BELOW -->
+      <inertia ixx="0.02" ixy="0" ixz="0" iyy="0.02" iyz="0" izz="0.02"/>
+    </inertial>
+
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <cylinder radius="0.05" length="0.1"/>
+      </geometry>
+      <material name="white" />
+    </visual>
+
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <cylinder radius="0.05" length="0.1"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="joint_${name}" type="fixed">
+    <origin xyz="${position}" rpy="${rpy}"/>
+    <parent link="${parent_link}"/>
+    <child link="${name}"/>
+  </joint>
+
+    <!-- Sensor plugin -->
+  <gazebo reference="${name}">
+    <sensor type="ray" name="head_hokuyo_sensor">
+      <pose>0 0 0 0 0 0</pose>
+      <visualize>false</visualize>
+
+      <!-- Rotation speed -->
+      <update_rate>15</update_rate>
+      <ray>
+        <scan>
+          <horizontal>
+            <!-- Points per rotation -->
+            <samples>90</samples>
+            <resolution>1.35</resolution>
+            <min_angle>-2.35</min_angle>
+            <max_angle>2.35</max_angle>
+          </horizontal>
+        </scan>
+        <!-- Range -->
+        <range>
+          <min>0.15</min>
+          <max>5.0</max>
+          <resolution>0.01</resolution>
+        </range>
+        <!-- Noise -->
+        <noise>
+          <type>gaussian</type>
+          <mean>0.0</mean>
+          <stddev>0.03</stddev> 
+        </noise>
+      </ray>
+      <plugin name="gazebo_ros_head_hokuyo_controller" filename="libgazebo_ros_laser.so">
+        <topicName>scan</topicName>
+        <frameName>/${name}</frameName>
+      </plugin>
+    </sensor>
+  </gazebo>
+
+  </xacro:macro>
+
+</robot>
