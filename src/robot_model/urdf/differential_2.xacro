@@ -190,8 +190,8 @@
       <wheelDiameter>0.2</wheelDiameter>
       <torque>0.1</torque>
       <commandTopic>cmd_vel</commandTopic>
-      <odometryTopic>/odom</odometryTopic>
-      <odometryFrame>/odom</odometryFrame>
+      <odometryTopic>/odom/robot_2</odometryTopic>
+      <odometryFrame>/odom/robot_2</odometryFrame>
       <robotBaseFrame>/base_link_2</robotBaseFrame>
       <legacyMode>true</legacyMode>
     </plugin>
