@@ -28,7 +28,7 @@
   </material>
   
   <gazebo reference="base_link_1">
-    <material>Gazebo/Orange</material>
+    <material>Gazebo/Green</material>
   </gazebo>
   <gazebo reference="link_left_wheel_1">
     <material>Gazebo/Blue</material>

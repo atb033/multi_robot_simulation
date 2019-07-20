@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <launch>
-    <arg name="x" default="4"/>
+    <arg name="x" default="3"/>
     <arg name="y" default="0"/>
     <arg name="z" default="0.2"/>
 
